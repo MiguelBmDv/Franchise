@@ -11,6 +11,9 @@ public interface ISucursalPersistencePort {
     Mono<Sucursal> saveSucursal(Sucursal sucursal);
     Flux<Sucursal> getAllSucursales();
     Mono<Void> updateSucursal(Sucursal sucursal);
+    Mono<Boolean> existsById(UUID id);
     Mono<Boolean> existsByNombreAndFranquiciaId(String nombre, String franquiciaId);
     Mono<Sucursal> getSucursal(UUID id);
+    Flux<Sucursal> findByFranquiciaId(String franquiciaId);
+
 }

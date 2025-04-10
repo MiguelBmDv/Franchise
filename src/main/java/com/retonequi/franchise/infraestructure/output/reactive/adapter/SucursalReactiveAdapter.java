@@ -50,5 +50,16 @@ public class SucursalReactiveAdapter implements ISucursalPersistencePort {
                 .defaultIfEmpty(false);
     }
 
+    @Override
+    public Mono<Boolean> existsById(UUID id) {
+        return sucursalRepository.existsById(id);
+    }
+
+    @Override
+    public Flux<Sucursal> findByFranquiciaId(String franquiciaId) {
+        return sucursalRepository.findByFranquiciaId(franquiciaId)
+                .map(sucursalEntityMapper::toModel);
+    }
+
 }
 

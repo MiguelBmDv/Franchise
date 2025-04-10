@@ -1,0 +1,8 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:9999/invalid
+    username: test
+    password: test
+  sql:
+    init:
+      mode: never
