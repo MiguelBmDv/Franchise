@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'jacoco'
 }
 
 group = 'com.retonequi'
@@ -24,35 +25,51 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	implementation 'io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE'
+	runtimeOnly 'org.postgresql:r2dbc-postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.mapstruct:mapstruct:1.6.3'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+	implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0'
 	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
-
 }
-
-apply plugin: 'jacoco'
-
 jacoco {
-    toolVersion = "0.8.10"
+	toolVersion = "0.8.10" 
 }
 
-tasks.test {
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport
+tasks.named('test') {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport 
 }
 
 tasks.jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.required = true
-        html.required = true
-    }
+	dependsOn test 
+	reports {
+		xml.required.set(true) 
+		html.required.set(true) 
+		csv.required.set(false) 
+	}
+}
+
+tasks.jacocoTestCoverageVerification {
+	dependsOn jacocoTestReport
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.8 
+			}
+		}
+	}
 }
 
