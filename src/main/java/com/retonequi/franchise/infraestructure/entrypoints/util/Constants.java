@@ -1,8 +1,9 @@
 package com.retonequi.franchise.infraestructure.entrypoints.util;
 
-public final class Constants {
-    private Constants() {}
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
+public final class Constants {
     public static final class Routes {
         private Routes() {}
 

@@ -44,6 +44,8 @@ public class ProductosHandler {
                 })
                 .flatMap(ignored -> ServerResponse.status(HttpStatus.CREATED)
                         .bodyValue(Messages.PRODUCTO_CREATED.getMessage()))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.CREATED)
+                        .bodyValue(Messages.PRODUCTO_CREATED.getMessage()))
                 .doOnError(ex -> log.error("Error creando producto", ex))
                 .onErrorResume(DomainException.class, ex -> buildErrorResponse(
                         HttpStatus.BAD_REQUEST,
@@ -110,6 +112,8 @@ public class ProductosHandler {
                         });
                 })
                 .flatMap(ignored -> ServerResponse.status(HttpStatus.CREATED)
+                        .bodyValue(Messages.PRODUCTO_UPDATE.getMessage()))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.CREATED)
                         .bodyValue(Messages.PRODUCTO_UPDATE.getMessage()))
                 .doOnError(ex -> log.error("Error actualizando producto", ex))
                 .onErrorResume(DomainException.class, ex -> buildErrorResponse(

@@ -3,7 +3,6 @@ package com.retonequi.franchise.domain.usecase;
 import java.util.UUID;
 
 import com.retonequi.franchise.domain.api.IProductoServicePort;
-import com.retonequi.franchise.domain.constants.Constants;
 import com.retonequi.franchise.domain.enums.Messages;
 import com.retonequi.franchise.domain.exceptions.DomainException;
 import com.retonequi.franchise.domain.model.Producto;
@@ -58,7 +57,7 @@ public class ProductoUseCase implements IProductoServicePort{
                     ? existing.nombre()
                     : producto.nombre();
 
-                Integer nuevoStock = (producto.stock() == null || producto.stock().equals(Constants.ZERO))
+                Integer nuevoStock = (producto.stock() == null)
                     ? existing.stock()
                     : producto.stock();
 

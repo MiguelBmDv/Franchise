@@ -5,11 +5,10 @@ import java.util.UUID;
 import com.retonequi.franchise.domain.enums.Messages;
 import com.retonequi.franchise.domain.exceptions.DomainException;
 
-public class HelperFunctions {
-    private HelperFunctions() {
-        throw new UnsupportedOperationException("Utility class");
-    }
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
+public class HelperFunctions {
     public static UUID validateUUID(String idStr) {
         try {
             return UUID.fromString(idStr);

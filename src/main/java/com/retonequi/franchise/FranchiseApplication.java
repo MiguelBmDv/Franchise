@@ -3,6 +3,7 @@ package com.retonequi.franchise;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
 import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
@@ -19,6 +20,7 @@ public class FranchiseApplication {
 	}
 
 	@Bean
+	@Profile("!test")
 	ConnectionFactoryInitializer initializer(ConnectionFactory connectiontFactory){
 
 		ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();

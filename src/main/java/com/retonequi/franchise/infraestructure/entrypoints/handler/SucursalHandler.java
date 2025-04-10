@@ -41,6 +41,8 @@ public class SucursalHandler {
                 })
                 .flatMap(ignored -> ServerResponse.status(HttpStatus.CREATED)
                         .bodyValue(Messages.SUCURSAL_CREATED.getMessage()))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.CREATED)
+                    .bodyValue(Messages.SUCURSAL_CREATED.getMessage()))
                 .doOnError(ex -> log.error("Error creando sucursal", ex))
                 .onErrorResume(DomainException.class, ex -> buildErrorResponse(
                         HttpStatus.BAD_REQUEST,
@@ -106,6 +108,8 @@ public class SucursalHandler {
                 })
                 .flatMap(ignored -> ServerResponse.status(HttpStatus.CREATED)
                         .bodyValue(Messages.SUCURSAL_UPDATE.getMessage()))
+                .switchIfEmpty(ServerResponse.status(HttpStatus.CREATED)
+                    .bodyValue(Messages.SUCURSAL_UPDATE.getMessage()))
                 .doOnError(ex -> log.error("Error actualizando sucursal", ex))
                 .onErrorResume(DomainException.class, ex -> buildErrorResponse(
                         HttpStatus.BAD_REQUEST,
