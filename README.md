@@ -39,7 +39,7 @@ El sistema maneja las siguientes entidades:
 
 ### 🗂️ Diagrama de la Base de Datos
 
-![Diagrama de BD](docs/diagrama-bd.png)
+![Diagrama de BD](docs/Franchise.png)
 
 ---
 
@@ -47,7 +47,7 @@ El sistema maneja las siguientes entidades:
 
 La API está documentada con OpenAPI y se encuentra en el archivo `openApi.yaml`.
 
-🔗 [Ver en Swagger Editor](https://editor.swagger.io/?url=https://gitlab.com/miguel.bernal1/franchisemicroservice/-/raw/main/openApi.yaml)
+🔗 [Ver en Swagger Editor](https://editor.swagger.io/?url=https://gitlab.com/miguel.bernal1/franchisemicroservice/-/blob/main/openApi.yaml)
 
 Incluye:
 
