@@ -1,6 +1,5 @@
 package com.retonequi.franchise.domain.usecase;
 
-import java.util.List;
 import java.util.UUID;
 
 import com.retonequi.franchise.domain.api.IFranquiciaServicePort;
@@ -8,6 +7,9 @@ import com.retonequi.franchise.domain.enums.Messages;
 import com.retonequi.franchise.domain.exceptions.DomainException;
 import com.retonequi.franchise.domain.model.Franquicia;
 import com.retonequi.franchise.domain.spi.IFranquiciaPersistencePort;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public class FranquiciaUseCase implements IFranquiciaServicePort {
 
@@ -18,37 +20,37 @@ public class FranquiciaUseCase implements IFranquiciaServicePort {
     }
 
     @Override
-    public void saveFranquicia(Franquicia franquicia) {
-        if (franquiciaPersistencePort.existsByNombre(franquicia.nombre())) {
-            throw new DomainException(Messages.FRANQUICIA_ALREADY_EXISTS);
-        }
-        franquiciaPersistencePort.saveFranquicia(franquicia);
+    public Mono <Franquicia> saveFranquicia(Franquicia franquicia) {
+        return franquiciaPersistencePort.existsByNombre(franquicia.nombre())
+            .flatMap(exists -> {
+                if (Boolean.TRUE.equals(exists)) {
+                    return Mono.error(new DomainException(Messages.FRANQUICIA_ALREADY_EXISTS));
+                }
+                return franquiciaPersistencePort.saveFranquicia(franquicia);
+            });
     }
 
     @Override
-    public List<Franquicia> getAllFranquicias() {
+    public Flux<Franquicia> getAllFranquicias() {
         return franquiciaPersistencePort.getAllFranquicias();
     }
 
     @Override
-    public void updateFranquicia(Franquicia franquicia) {
+    public Mono<Void> updateFranquicia(Franquicia franquicia) {
         if (franquicia.nombre() == null || franquicia.nombre().isBlank()) {
-            throw new DomainException(Messages.INVALID_NAME);
+            return Mono.error(new DomainException(Messages.INVALID_NAME));
         }
 
-        franquiciaPersistencePort.updateFranquicia(franquicia);
+        return franquiciaPersistencePort.updateFranquicia(franquicia);
     }
 
     @Override
-    public Franquicia getFranquicia(UUID id) {
+    public Mono<Franquicia> getFranquicia(UUID id) {
         if (id == null) {
-            throw new DomainException(Messages.INVALID_ID);
+            return Mono.error(new DomainException(Messages.INVALID_ID));
         }
+
         return franquiciaPersistencePort.getFranquicia(id)
-                .orElseThrow(() -> new DomainException(Messages.FRANQUICIA_NOT_FOUND));
+            .switchIfEmpty(Mono.error(new DomainException(Messages.FRANQUICIA_NOT_FOUND)));
     }
-
-
-
-
 }
