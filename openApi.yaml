@@ -10,7 +10,7 @@ info:
     - [GitLab](https://gitlab.com/miguel.bernal1/franchisemicroservice)
     
     Recursos útiles:
-    - [Editor Swagger](https://editor.swagger.io/?url=https://gitlab.com/miguel.bernal1/franchisemicroservice/-/raw/main/openApi.yaml)
+    - [Editor Swagger](https://editor.swagger.io/?url=https://raw.githubusercontent.com/MiguelBmDv/Franchise/main/openApi.yaml)
   termsOfService: https://gitlab.com/miguel.bernal1/franchisemicroservice/-/blob/main/README.md
   contact:
     email: miguel.bernal@pragma.com.co
