@@ -1,0 +1,443 @@
+openapi: 3.0.4
+info:
+  title: Franchise Microservice - OpenAPI 3.0
+  description: |-
+    Este microservicio está diseñado para gestionar la estructura de franquicias, permitiendo la creación, consulta y actualización de franquicias, sus sucursales y los productos asociados a cada sucursal.
+
+    La documentación está basada en la especificación OpenAPI 3.0, siguiendo un enfoque de diseño primero (*design-first*) para garantizar claridad, escalabilidad y mantenimiento a largo plazo.
+
+    Exploracion del código fuente en el siguiente repositorio:
+    - [GitLab](https://gitlab.com/miguel.bernal1/franchisemicroservice)
+    
+    Recursos útiles:
+    - [Editor Swagger](https://editor.swagger.io/?url=https://gitlab.com/miguel.bernal1/franchisemicroservice/-/raw/main/openApi.yaml)
+  termsOfService: https://gitlab.com/miguel.bernal1/franchisemicroservice/-/blob/main/README.md
+  contact:
+    email: miguel.bernal@pragma.com.co
+  license:
+    name: Uso interno - Todos los derechos reservados
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Entorno local de desarrollo
+tags:
+  - name: franquicias
+    description: Operaciones relacionadas con la gestión de franquicias
+  - name: sucursales
+    description: Operaciones para manejar las sucursales de una franquicia
+  - name: productos
+    description: Operaciones sobre los productos disponibles en una sucursal
+paths:
+  /franquicias:
+    get:
+        tags:
+          - franquicias
+        summary: Obtener todas las franquicias
+        description: Retorna una lista con todas las franquicias registradas en el sistema.
+        operationId: getFranquicias
+        responses:
+          '200':
+            description: Lista de franquicias obtenida exitosamente
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Franquicia'
+          '404':
+            description: No se encontraron franquicias
+          '500':
+            description: Error inesperado en el servidor.
+    post:
+      tags:
+        - franquicias
+      summary: Crear una nueva franquicia
+      description: Registra una nueva franquicia en el sistema.
+      operationId: crearFranquicia
+      requestBody:
+        description: Objeto JSON con la información de la franquicia a crear.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FranquiciaCreate'
+      responses:
+        '201':
+          description: Franquicia creada exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FranquiciaCreate'
+        '400':
+          description: Entrada inválida. Verifique los campos.
+        '500':
+          description: Error inesperado en el servidor.
+    put:
+      tags:
+        - franquicias
+      summary: Actualizar una franquicia existente
+      description: Actualiza los datos de una franquicia registrada, identificada por su ID.
+      operationId: actualizarFranquicia
+      requestBody:
+        description: Objeto JSON con el ID de la franquicia y los datos a actualizar.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Franquicia'
+      responses:
+        '200':
+          description: Franquicia actualizada exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Franquicia'
+        '400':
+          description: Datos de entrada inválidos.
+        '404':
+          description: Franquicia no encontrada.
+        '500':
+          description: Error inesperado del servidor.
+          
+  /sucursales:
+    get:
+      tags:
+        - sucursales
+      summary: Obtener todas las sucursales
+      description: Retorna una lista con todas las sucursales registradas en el sistema.
+      operationId: getSucursales
+      responses:
+        '200':
+          description: Lista de sucursales obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sucursal'
+        '404':
+          description: No se encontraron sucursales
+        '500':
+          description: Error inesperado del servidor.
+    post:
+      tags:
+        - sucursales
+      summary: Crear una nueva sucursal
+      description: Registra una nueva sucursal asociada a una franquicia existente.
+      operationId: crearSucursal
+      requestBody:
+        description: Objeto JSON con los datos necesarios para registrar una sucursal.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SucursalCreate'
+      responses:
+        '201':
+          description: Sucursal creada exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sucursal'
+        '400':
+          description: Entrada inválida. Verifique los campos.
+        '500':
+          description: Error inesperado del servidor.
+    put:
+      tags:
+        - sucursales
+      summary: Actualizar una sucursal existente
+      description: Actualiza el nombre de una sucursal existente identificada por su ID.
+      operationId: actualizarSucursal
+      requestBody:
+        description: Objeto JSON con el ID de la sucursal y el nuevo nombre.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SucursalUpdate'
+      responses:
+        '200':
+          description: Sucursal actualizada exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sucursal'
+        '400':
+          description: Datos de entrada inválidos.
+        '404':
+          description: Sucursal no encontrada.
+        '500':
+          description: Error inesperado del servidor.  
+          
+  /productos:
+    get:
+      tags:
+        - productos
+      summary: Obtener todos los productos
+      description: Retorna una lista con todos los productos registrados en el sistema.
+      operationId: getProductos
+      responses:
+        '200':
+          description: Lista de productos obtenida exitosamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producto'
+        '404':
+          description: No se encontraron productos.
+        '500':
+          description: Error inesperado del servidor.
+    post:
+      tags:
+        - productos
+      summary: Crear un nuevo producto
+      description: Registra un nuevo producto asociado a una sucursal.
+      operationId: crearProducto
+      requestBody:
+        description: Objeto JSON con la información del producto a crear.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoCreate'
+      responses:
+        '201':
+          description: Producto creado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+        '400':
+          description: Entrada inválida. Verifique los campos.
+        '500':
+          description: Error inesperado del servidor.
+    put:
+      tags:
+        - productos
+      summary: Actualizar un producto
+      description: Actualiza la información de un producto registrado.
+      operationId: actualizarProducto
+      requestBody:
+        description: Objeto JSON con los nuevos datos del producto.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoUpdate'
+      responses:
+        '200':
+          description: Producto actualizado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+        '400':
+          description: Datos de entrada inválidos.
+        '404':
+          description: Producto no encontrado.
+        '500':
+          description: Error inesperado del servidor.
+  /productos/{productoId}:        
+    delete:
+      tags:
+        - productos
+      summary: Eliminar un producto
+      description: Elimina un producto por su ID.
+      operationId: eliminarProducto
+      parameters:
+        - name: productoId
+          in: path
+          required: true
+          description: ID del producto a eliminar.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Producto eliminado exitosamente.
+        '404':
+          description: Producto no encontrado.
+        '500':
+          description: Error inesperado del servidor.
+
+  /productos/top-stock/{franquiciaId}:
+    get:
+      tags:
+        - productos
+      summary: Obtener productos con mayor stock por franquicia
+      description: Retorna una lista de los productos con mayor stock asociados a una franquicia.
+      operationId: getTopStockProductos
+      parameters:
+        - name: franquiciaId
+          in: path
+          required: true
+          description: ID de la franquicia.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de productos con mayor stock obtenida exitosamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductoTopStock'
+        '404':
+          description: No se encontraron productos para la franquicia.
+        '500':
+          description: Error inesperado del servidor.
+    
+
+components:
+  schemas:
+    FranquiciaCreate:
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: Starbucks
+      required:
+        - nombre
+    Franquicia:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 5d493b5d-8abb-4a58-a838-39687ca5eb1d
+        nombre:
+          type: string
+          example: Starbucks
+      required:
+        - id
+        - nombre
+    SucursalCreate:
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: "Ibague-01"
+        franquiciaId:
+          type: string
+          format: uuid
+          example: "5d493b5d-8abb-4a58-a838-39687ca5eb1d"
+      required:
+        - nombre
+        - franquiciaId
+    SucursalUpdate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "1a1ab2ee-5451-4518-83bd-a21f5ff89634"
+        nombre:
+          type: string
+          example: "Ibague Centro"
+      required:
+        - id
+        - nombre
+    Sucursal:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "1a1ab2ee-5451-4518-83bd-a21f5ff89634"
+        nombre:
+          type: string
+          example: "Ibague-01"
+        franquiciaId:
+          type: string
+          format: uuid
+          example: "5d493b5d-8abb-4a58-a838-39687ca5eb1d"
+      required:
+        - id
+        - nombre
+        - franquiciaId
+    Producto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "701f48b6-9f7b-48de-8385-cdaadba1903e"
+        nombre:
+          type: string
+          example: "Big mac"
+        stock:
+          type: integer
+          example: 92
+        sucursalId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      required:
+        - id
+        - nombre
+        - stock
+        - sucursalId
+    ProductoCreate:
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: "Big mac"
+        stock:
+          type: integer
+          example: 92
+        sucursalId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      required:
+        - nombre
+        - stock
+        - sucursalId
+    ProductoUpdate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "701f48b6-9f7b-48de-8385-cdaadba1903e"
+        nombre:
+          type: string
+          example: "Mc Flury"
+        stock:
+          type: integer
+          example: 25
+      required:
+        - id
+        - nombre
+        - stock
+    ProductoTopStock:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "701f48b6-9f7b-48de-8385-cdaadba1903e"
+        nombre:
+          type: string
+          example: "Big mac"
+        stock:
+          type: integer
+          example: 92
+        sucursalId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        nombreSucursal:
+          type: string
+          example: "Sucursal Norte"
+      required:
+        - id
+        - nombre
+        - stock
+        - sucursalId
+        - nombreSucursal
+        
