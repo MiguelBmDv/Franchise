@@ -104,7 +104,7 @@ public class SucursalHandler {
                                 return sucursalServicePort.updateSucursal(model);
                         });
                 })
-                .flatMap(ignored -> ServerResponse.ok()
+                .flatMap(ignored -> ServerResponse.status(HttpStatus.CREATED)
                         .bodyValue(Messages.SUCURSAL_UPDATE.getMessage()))
                 .doOnError(ex -> log.error("Error actualizando sucursal", ex))
                 .onErrorResume(DomainException.class, ex -> buildErrorResponse(

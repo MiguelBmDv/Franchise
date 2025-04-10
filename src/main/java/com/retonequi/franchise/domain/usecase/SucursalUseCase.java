@@ -68,9 +68,6 @@ public class SucursalUseCase implements ISucursalServicePort {
                 if (!existing.franquiciaId().equals(sucursal.franquiciaId())) {
                     return Mono.error(new DomainException(Messages.FORBIDDEN_UPDATE_FRANQUICIA_ID));
                 }
-                if (existing.nombre().equalsIgnoreCase(sucursal.nombre())) {
-                    return Mono.error(new DomainException(Messages.SUCURSAL_ALREADY_EXISTS));
-                }
                 return sucursalPersistencePort.existsByNombreAndFranquiciaId(
                     sucursal.nombre(), sucursal.franquiciaId()
                 ).flatMap(exists -> {
